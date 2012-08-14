@@ -1,7 +1,162 @@
 Introduction
 ============
 
-This product helps integrating the collective.geo.* packages and aims to provide some sensible defaults.
+This product helps integrating the ``collective.geo.*`` packages and aims to
+provide some sensible defaults. Besides some integration glue it defines a new
+interface ``IGeocodableLocation`` that can be used to create adapters that knows
+how to represent the location of a content type with address-like fields as a
+string suitable for passing to a geocoding API.
+
+
+Purpose
+========
+
+- Automatic geocoding of ``IGeoreferenceable`` content types via an 
+  ``IGeocodableLocation`` adapter
+- Caching of geocoding responses
+- Only trigger geocoding lookups if location related fields on the content type
+  changed
+- Facilitate doing automatic geocoding based on location fields and still allow
+  for manually setting custom coordinates
+- Provide a new viewlet manager that isn't included in main template to
+  specifically inject a content map into a custom template
+
+
+Usage
+=====
+
+
+Automatically geocoding your content types
+------------------------------------------
+
+In order for your content types to be automatically geocoded on ``ObjectEdited``
+or ``ObjectInitialized`` events, you need to create an adapter for your content 
+type that implements ``IGeocodableLocation`` and knows how to build a geocodable
+location string from the content type's location related fields.
+
+In order to implement the interface you need to define a ``getLocationString``
+method on your adapter that returns the complete location as a comma separated
+string, with the location parts getting less specific from left to right.
+
+For example::
+
+    '1600 Amphitheatre Parkway, Mountain View, CA, US'
+    'Engehaldestr. 53, 3012 Bern, Switzerland'
+
+If the ``getLocationString`` method returns the empty string or ``None``, the 
+event handler won't attempt to do a geocode lookup, so this is the suggested way
+to abort geocoding if not enough location information is available.
+
+Example code::
+
+    from ftw.geo.interfaces import IGeocodableLocation
+    from zope.component import adapts
+    from zope.interface import implements
+
+
+    class MyTypeLocationAdapter(object):
+        """Adapter that is able to represent the location of an MyType in
+        a geocodable string form.
+        """
+        implements(IGeocodableLocation)
+        adapts(IMyType)
+
+        def __init__(self, context):
+            self.context = context
+
+        def getLocationString(self):
+            """Build a geocodable location string from the MyType's address
+            related fields.
+            """
+            street = self.context.getAddress()
+            zip_code = self.context.getZip()
+            city = self.context.getCity()
+            country = self.context.getCountry()
+
+            location = ', '.join([street, zip_code, city, country])
+            return location
+
+
+Register the adapter with ZCML::
+
+    <!-- Adapter to make OrgUnits automatically geocodable -->
+    <adapter
+        factory=".orgunit.OrgUnitLocationAdapter"
+        />
+
+
+Caching of geocoding responses
+------------------------------
+
+Responses from the geocoding API are being RAM cached. The cache key being used
+is the result of the ``getLocationString`` method, which means that for every
+unique location string the geocoding lookup is only done once and subsequently
+fetched from the cache.
+
+
+Only triggering geocoding when location fields changed
+------------------------------------------------------
+
+If we were to do a geocode lookup on every ``ObjectEdited`` event, any custom
+coordinates that have been set would be overriden every time *any* field on
+the content item is changed (even if the geocoding response was fetched from the
+cache).
+
+To avoid this, ``ftw.geo`` stores the result of ``getLocationString`` as an 
+annotation on the object and on ``ObjectEdited`` checks if the location string 
+(and therefore the location related fields) actually changed, and only does the
+lookup when necessary. This means:
+
+On ``ObjectInitialized`` the content type will first be geocoded initally
+(unless ``getLocationString`` returned ``None`` or the empty string). If you 
+manually set coordinates after that through the 'Coordinates' tab provided by
+``collective.geo.contentlocations`` they will be saved and overwrite the
+coordinates determined by geocoding. After that, if you edit the content item
+and change any fields *not* related to the location, the custom coordinates will
+be preserved. Only if you change one of the location related fields used in 
+``getLocationString`` the geocoding will be performed again and any custom
+coordinates overwritten.
+
+
+Google API Key
+--------------
+
+Google's geocoding API can be used without an API Key, but then is limited to
+2500 requests per day. If you defined your Google Maps API Key in 
+``collective.geo.settings`` it will be used, otherwise the geocoding API will be
+called without an API key.
+
+
+Rendering a content map viewlet in a custom template
+----------------------------------------------------
+
+If you don't want your content map displayed in one of the default viewlet
+managers (plone.abovecontentbody / plone.abovecontentbody) on the content item's
+main view but instead in a custom view, you can use the ``ftw.geo.contentmap``
+viewlet manager.
+
+The exact same viewlet provided by ``collective.geo.kml`` is registered for that
+viewlet manager.
+
+Simply render the viewlet manager in your template where you want your map to
+appear::
+
+    <div tal:replace="structure provider:ftw.geo.contentmap" />
+
+
+
+Dependencies
+============
+
+`collective.geo.settings <https://github.com/collective/collective.geo.settings>`_
+
+`collective.geo.openlayers <https://github.com/collective/collective.geo.openlayers>`_
+
+`collective.geo.geographer <https://github.com/collective/collective.geo.geographer>`_
+
+`collective.geo.contentlocations <https://github.com/collective/collective.geo.contentlocations>`_
+
+`collective.geo.kml <https://github.com/collective/collective.geo.kml>`_
 
 
 Links

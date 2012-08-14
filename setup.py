@@ -36,6 +36,11 @@ setup(name='ftw.geo',
 
       install_requires=[
         'setuptools',
+        'collective.geo.settings',
+        'collective.geo.openlayers',
+        'collective.geo.geographer',
+        'collective.geo.contentlocations',
+        'collective.geo.kml',
         ],
 
       tests_require=tests_require,

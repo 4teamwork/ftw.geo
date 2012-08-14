@@ -4,12 +4,26 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="ftw.geo">
 
+    <include package=".browser" />
+
     <genericsetup:registerProfile
         name="default"
         title="ftw.geo"
         directory="profiles/default"
         description="collective.geo.* integration"
         provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <subscriber
+        for="collective.geo.geographer.interfaces.IGeoreferenceable
+             Products.Archetypes.interfaces.IObjectEditedEvent"
+        handler=".handlers.geocodeAddressHandler"
+        />
+
+    <subscriber
+        for="collective.geo.geographer.interfaces.IGeoreferenceable
+             Products.Archetypes.interfaces.IObjectInitializedEvent"
+        handler=".handlers.geocodeAddressHandler"
         />
 
 </configure>

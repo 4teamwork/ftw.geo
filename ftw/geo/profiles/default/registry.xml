@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<registry>
+
+    <records interface="collective.geo.settings.interfaces.IGeoSettings">
+      <value key="default_layers" purge="true">
+        <element>google_map</element>
+        <element>google_sat</element>
+        <element>google_hyb</element>
+        <element>osm</element>
+      </value>
+      <!-- Default Position: Bern, Switzerland -->
+      <value key="latitude">46.94792220000021</value>
+      <value key="longitude">7.444608500000036</value>
+    </records>
+
+    <records interface="collective.geo.settings.interfaces.IGeoFeatureStyle">
+      <value key="map_viewlet_position">plone.abovecontentbody</value>
+      <value key="map_width" purge="false" />
+      <value key="map_height" purge="false" />
+    </records>
+
+</registry>
