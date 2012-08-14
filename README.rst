@@ -14,7 +14,7 @@ Purpose
 - Automatic geocoding of ``IGeoreferenceable`` content types via an 
   ``IGeocodableLocation`` adapter
 - Caching of geocoding responses
-- Only trigger geocoding lookups if location related fields on the content type
+- Only trigger geocoding lookups if location related fields on the content item
   changed
 - Facilitate doing automatic geocoding based on location fields and still allow
   for manually setting custom coordinates
@@ -79,9 +79,8 @@ Example code::
 
 Register the adapter with ZCML::
 
-    <!-- Adapter to make OrgUnits automatically geocodable -->
     <adapter
-        factory=".orgunit.OrgUnitLocationAdapter"
+        factory=".mytpe.MyTypeLocationAdapter"
         />
 
 
@@ -99,23 +98,23 @@ Only triggering geocoding when location fields changed
 
 If we were to do a geocode lookup on every ``ObjectEdited`` event, any custom
 coordinates that have been set would be overriden every time *any* field on
-the content item is changed (even if the geocoding response was fetched from the
-cache).
+the content item is changed (even if the geocoding response itself was fetched
+from the cache).
 
-To avoid this, ``ftw.geo`` stores the result of ``getLocationString`` as an 
-annotation on the object and on ``ObjectEdited`` checks if the location string 
+To avoid this, ``ftw.geo`` stores the result of ``getLocationString`` as an
+annotation on the object and on ``ObjectEdited`` checks if the location string
 (and therefore the location related fields) actually changed, and only does the
 lookup when necessary. This means:
 
 On ``ObjectInitialized`` the content type will first be geocoded initally
-(unless ``getLocationString`` returned ``None`` or the empty string). If you 
+(unless ``getLocationString`` returned ``None`` or the empty string). If you
 manually set coordinates after that through the 'Coordinates' tab provided by
 ``collective.geo.contentlocations`` they will be saved and overwrite the
-coordinates determined by geocoding. After that, if you edit the content item
-and change any fields *not* related to the location, the custom coordinates will
-be preserved. Only if you change one of the location related fields used in 
-``getLocationString`` the geocoding will be performed again and any custom
-coordinates overwritten.
+coordinates determined previously by geocoding. After that, if you edit the
+content item and change any fields *not* related to the location, the custom
+coordinates will be preserved. Only if you change one of the location related
+fields used in ``getLocationString`` the geocoding will be performed again and
+any custom coordinates overwritten.
 
 
 Google API Key
