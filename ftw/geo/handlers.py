@@ -18,7 +18,6 @@ LOCATION_KEY = 'ftw.geo.interfaces.IGeocodableLocation'
 def geocode_location(location):
     """Does a geocode lookup for `location` using the Google geocode API.
     """
-
     registry = getUtility(IRegistry)
     geo_settings = registry.forInterface(IGeoSettings)
     google_api_key = geo_settings.googleapi
@@ -52,12 +51,14 @@ def geocodeAddressHandler(obj, event):
         return
 
     location = location_adapter.getLocationString()
+
     if location:
-        ann = IAnnotations(obj)
+        ann = queryAdapter(obj, IAnnotations)
         previous_location = ann.get(LOCATION_KEY)
         # Only do the geocoding lookup if the location changed
         if not location == previous_location:
             place, coords = geocode_location(location)
-            IGeoManager(obj).setCoordinates('Point', (coords[1], coords[0]))
+            geo_manager = queryAdapter(obj, IGeoManager)
+            geo_manager.setCoordinates('Point', (coords[1], coords[0]))
             # Update the stored location
             ann[LOCATION_KEY] = location
