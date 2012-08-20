@@ -4,7 +4,15 @@ import os
 version = '1.0.dev0'
 maintainer = 'Lukas Graf'
 
-tests_require = []
+tests_require = [
+    'ftw.testing',
+    'mocker',
+    'plone.app.testing',
+    'plone.testing',
+    'zope.configuration',
+    'unittest2',
+    'transaction',
+    ]
 
 setup(name='ftw.geo',
       version=version,
