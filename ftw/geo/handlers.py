@@ -57,8 +57,10 @@ def geocodeAddressHandler(obj, event):
         previous_location = ann.get(LOCATION_KEY)
         # Only do the geocoding lookup if the location changed
         if not location == previous_location:
-            place, coords = geocode_location(location)
-            geo_manager = queryAdapter(obj, IGeoManager)
-            geo_manager.setCoordinates('Point', (coords[1], coords[0]))
-            # Update the stored location
-            ann[LOCATION_KEY] = location
+            geocoding_result = geocode_location(location)
+            if geocoding_result:
+                place, coords = geocoding_result
+                geo_manager = queryAdapter(obj, IGeoManager)
+                geo_manager.setCoordinates('Point', (coords[1], coords[0]))
+                # Update the stored location
+                ann[LOCATION_KEY] = location
