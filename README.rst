@@ -18,8 +18,6 @@ Purpose
   changed
 - Facilitate doing automatic geocoding based on location fields and still allow
   for manually setting custom coordinates
-- Provide a new viewlet manager that isn't included in main template to
-  specifically inject a content map into a custom template
 
 
 Usage
@@ -131,16 +129,28 @@ Rendering a content map viewlet in a custom template
 
 If you don't want your content map displayed in one of the default viewlet
 managers (plone.abovecontentbody / plone.abovecontentbody) on the content item's
-main view but instead in a custom view, you can use the ``ftw.geo.contentmap``
-viewlet manager.
+main view but instead in a custom view and/or a different viewlet manager, this
+is how you do it:
 
-The exact same viewlet provided by ``collective.geo.kml`` is registered for that
-viewlet manager.
+First, you need to make sure your browser view implements a specific interface
+and provide a KMLMapViewletLayer adapter (view, request, context, widget) for
+it::
 
-Simply render the viewlet manager in your template where you want your map to
-appear::
+    <adapter
+        for="..interfaces.IContactView
+             zope.interface.Interface
+             zope.interface.Interface
+             zope.interface.Interface"
+        factory="collective.geo.kml.browser.viewlets.KMLMapViewletLayers"
+        />
 
-    <div tal:replace="structure provider:ftw.geo.contentmap" />
+Then, in your view's template, simply use the macros provided by
+collective.geo.mapwidget::
+
+        <div id="kml-content-viewlet">
+          <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
+          <metal:use use-macro="context/@@collectivegeo-macros/map-widget" />
+        </div>
 
 
 
