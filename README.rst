@@ -168,6 +168,49 @@ Dependencies
 `collective.geo.kml <https://github.com/collective/collective.geo.kml>`_
 
 
+If you're having trouble installing the collective.geo.* dependencies (namely
+``libgeos`` and ``shapely``) trough your distribution's package manager, you can
+build them yourself using this buildout configuration:
+
+
+
+**shapely.cfg**::
+
+    [buildout]
+    parts +=
+        geos
+        shapely
+
+    [geos]
+    recipe = zc.recipe.cmmi
+    url = http://download.osgeo.org/geos/geos-3.3.5.tar.bz2
+    md5sum = 2ba61afb7fe2c5ddf642d82d7b16e75b
+    extra_options =
+        CC='gcc -m32'
+        CXX='g++ -m32'
+
+    [shapely]
+    recipe = zc.recipe.egg:custom
+    egg = Shapely
+    include-dirs = ${geos:location}/include
+    library-dirs = ${geos:location}/lib
+    rpath = ${geos:location}/lib
+
+Use it in your main ``buildout.cfg`` like this::
+
+    [buildout]
+    extends =
+    #   ...
+        shapely.cfg
+
+    [instance1]
+    eggs +=
+        ${shapely:egg}
+
+    environment-vars +=
+        LD_LIBRARY_PATH ${geos:location}/lib
+
+
 Links
 =====
 
