@@ -17,8 +17,8 @@ tests_require = [
 setup(name='ftw.geo',
       version=version,
       description='Integration package for collective.geo.* packages.',
-      long_description=open('README.rst').read() + '\n' +
-      open(os.path.join('docs', 'HISTORY.txt')).read(),
+      long_description=open('README.rst').read() + '\n' + \
+          open(os.path.join('docs', 'HISTORY.txt')).read(),
 
       classifiers=[
         'Framework :: Plone',
