@@ -11,7 +11,7 @@ string suitable for passing to a geocoding API.
 Purpose
 ========
 
-- Automatic geocoding of ``IGeoreferenceable`` content types via an 
+- Automatic geocoding of ``IGeoreferenceable`` content types via an
   ``IGeocodableLocation`` adapter
 - Caching of geocoding responses
 - Only trigger geocoding lookups if location related fields on the content item
@@ -28,7 +28,7 @@ Automatically geocoding your content types
 ------------------------------------------
 
 In order for your content types to be automatically geocoded on ``ObjectEdited``
-or ``ObjectInitialized`` events, you need to create an adapter for your content 
+or ``ObjectInitialized`` events, you need to create an adapter for your content
 type that implements ``IGeocodableLocation`` and knows how to build a geocodable
 location string from the content type's location related fields.
 
@@ -41,7 +41,7 @@ For example::
     '1600 Amphitheatre Parkway, Mountain View, CA, US'
     'Engehaldestr. 53, 3012 Bern, Switzerland'
 
-If the ``getLocationString`` method returns the empty string or ``None``, the 
+If the ``getLocationString`` method returns the empty string or ``None``, the
 event handler won't attempt to do a geocode lookup, so this is the suggested way
 to abort geocoding if not enough location information is available.
 
@@ -119,7 +119,7 @@ Google API Key
 --------------
 
 Google's geocoding API can be used without an API Key, but then is limited to
-2500 requests per day. If you defined your Google Maps API Key in 
+2500 requests per day. If you defined your Google Maps API Key in
 ``collective.geo.settings`` it will be used, otherwise the geocoding API will be
 called without an API key.
 
@@ -217,7 +217,7 @@ Links
 - Main github project repository: https://github.com/4teamwork/ftw.geo
 - Issue tracker: https://github.com/4teamwork/ftw.geo/issues
 - Package on pypi: http://pypi.python.org/pypi/ftw.geo
-- Continuous integration: https://jenkins.4teamwork.ch/search/?q=ftw.geo
+- Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.geo
 
 
 Contributors
