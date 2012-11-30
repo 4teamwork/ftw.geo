@@ -49,6 +49,7 @@ setup(name='ftw.geo',
         'collective.geo.geographer',
         'collective.geo.contentlocations',
         'collective.geo.kml',
+        'ftw.upgrade',
         ],
 
       tests_require=tests_require,

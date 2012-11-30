@@ -5,5 +5,8 @@ Changelog
 1.0 (unreleased)
 ------------------
 
+- Added import step to uninstall Products.Maps using quickinstaller.
+  [lukasg]
+
 - First implementation.
   [lukasg]
