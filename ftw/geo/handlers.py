@@ -1,13 +1,10 @@
 from collective.geo.contentlocations.interfaces import IGeoManager
-from collective.geo.settings.interfaces import IGeoSettings
 from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
 from geopy.geocoders.google import GQueryError
 from geopy.geocoders.google import GTooManyQueriesError
 from plone.memoize import ram
-from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
 from zope.component import queryAdapter
 
 
@@ -18,16 +15,10 @@ LOCATION_KEY = 'ftw.geo.interfaces.IGeocodableLocation'
 def geocode_location(location):
     """Does a geocode lookup for `location` using the Google geocode API.
     """
-    registry = getUtility(IRegistry)
-    geo_settings = registry.forInterface(IGeoSettings)
-    google_api_key = geo_settings.googleapi
 
-    # Use Google API key if we have one, otherwise call geocoder
-    # API without it (limited to 2500 lookups / day)
-    if google_api_key:
-        gmgeocoder = geocoders.GoogleV3(google_api_key)
-    else:
-        gmgeocoder = geocoders.GoogleV3()
+    # Google map api v3 does not take any api key
+    # Check GoogleV3 implementation
+    gmgeocoder = geocoders.GoogleV3()
 
     try:
         place, coords = gmgeocoder.geocode(location)

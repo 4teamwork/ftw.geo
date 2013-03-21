@@ -5,6 +5,10 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
+- Remove api key usage. The geopy GoogleV3 Geocoder does not
+  implement an api key.
+  [mathias.leimgruber]
+
 - Use google map api V3 of geopy 0.95.
   See -> http://plone.293351.n2.nabble.com/collective-geo-GBadKeyError-when-geocoding-w-geopy-td7563845.html
   [mathias.leimgruber]
