@@ -25,9 +25,9 @@ def geocode_location(location):
     # Use Google API key if we have one, otherwise call geocoder
     # API without it (limited to 2500 lookups / day)
     if google_api_key:
-        gmgeocoder = geocoders.Google(google_api_key)
+        gmgeocoder = geocoders.GoogleV3(google_api_key)
     else:
-        gmgeocoder = geocoders.Google()
+        gmgeocoder = geocoders.GoogleV3()
 
     try:
         place, coords = gmgeocoder.geocode(location)

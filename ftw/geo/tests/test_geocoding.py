@@ -79,7 +79,7 @@ class TestGeocoding(MockTestCase):
 
         self.request = self.mocker.mock()
         req_method = self.mocker.replace(
-            'geopy.geocoders.google.Google.geocode_url')
+            'geopy.geocoders.googlev3.GoogleV3.geocode_url')
         self.expect(req_method(ARGS, KWARGS)).call(
             self.request).count(0, None)
         self.expect(self.request(ARGS, KWARGS)).result(result)
