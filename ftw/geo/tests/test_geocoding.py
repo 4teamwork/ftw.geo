@@ -9,10 +9,12 @@ from ftw.geo.tests.utils import is_coord_tuple
 from ftw.testing import MockTestCase
 from geopy.geocoders.googlev3 import GQueryError
 from geopy.geocoders.googlev3 import GTooManyQueriesError
+from mocker import ANY
 from mocker import ARGS
 from mocker import KWARGS
 from mocker import MATCH
 from plone.registry.interfaces import IRegistry
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.component import getGlobalSiteManager
@@ -21,8 +23,6 @@ from zope.component import queryAdapter
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
-from Products.statusmessages.interfaces import IStatusMessage
-from mocker import ANY
 
 
 class ISomeType(Interface):
@@ -94,9 +94,9 @@ class TestGeocoding(MockTestCase):
         self.mock_adapter(self.statusmsg, IStatusMessage, (Interface, ))
 
     def mock_context(self, address='Engehaldestr. 53',
-                           zip_code='3012',
-                           city='Bern',
-                           country='Switzerland'):
+                     zip_code='3012',
+                     city='Bern',
+                     country='Switzerland'):
         ifaces = [ISomeType, IGeoreferenceable, IAnnotations, IGeoreferenced]
         self.context = self.providing_stub(ifaces)
         self.expect(self.context.getAddress()).result(address)
@@ -232,10 +232,10 @@ class TestGeocoding(MockTestCase):
         self.mock_geosettings_registry()
 
         result = ((u'3001 Berne, Switzerland',
-                          (46.958857500000001, 7.4273286000000001)),
+                 (46.958857500000001, 7.4273286000000001)),
 
-                          (u'3000 Berne, Switzerland',
-                          (46.958857500000002, 7.4273286000000002)), )
+                 (u'3000 Berne, Switzerland',
+                 (46.958857500000002, 7.4273286000000002)), )
         self.replace_geopy_geocoders(result=result)
         self.replay()
 
