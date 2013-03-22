@@ -20,6 +20,7 @@ from zope.component import adapts
 from zope.component import getGlobalSiteManager
 from zope.component import provideAdapter
 from zope.component import queryAdapter
+from zope.component.hooks import setSite
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
@@ -182,6 +183,10 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_geocoding_handler_with_invalid_location(self):
+        site = self.create_dummy(getSiteManager=getGlobalSiteManager,
+                                 REQUEST=self.stub_request())
+        setSite(site)
+        self.mock_statusmessage_adapter()
         self.mock_context('Bag End', '1234', 'The Shire', 'Middle Earth')
         self.mock_annotations()
         self.mock_geosettings_registry()
@@ -191,6 +196,7 @@ class TestGeocoding(MockTestCase):
 
         event = self.mocker.mock()
         geocodeAddressHandler(self.context, event)
+        self.assertTrue(len(self.message_cache.info))
 
     def test_geocoding_handler_with_empty_location_string(self):
         self.mock_context('', '', '', '')
