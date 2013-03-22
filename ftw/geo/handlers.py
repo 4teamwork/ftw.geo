@@ -41,14 +41,16 @@ def geocode_location(location):
         results = list(gmgeocoder.geocode(location, exactly_one=False))
         place, coords = results[0]
         if len(results) > 1:
-            msg = _(u'More than one location found, chose first match '
+            msg = _(u'msg_multiple_matches',
+                    default=u'More than one location found, chose first match '
                     '"${place}". Please check that coordinates are correct.',
                     mapping=dict(place=place))
         return (place, coords, msg)
 
     except GQueryError:
         # Couldn't find a suitable location
-        msg= _(u'Couldn\'t find a suitable match for location '
+        msg= _(u'msg_no_match',
+                default=u'Couldn\'t find a suitable match for location '
                 '"${location}". Please use the "coordinates" tab to manually '
                 'set the correct map loaction.',
                 mapping=dict(location=location))
@@ -56,19 +58,23 @@ def geocode_location(location):
         return
 
     except GTooManyQueriesError:
-        msg= _(u'Geocoding failed because daily query limit has been exceeded.')
+        msg= _(u'msg_too_many_queries',
+               default=u'Geocoding failed because daily query limit has '
+               'been exceeded.')
         display_status_message(msg)
         return
 
     except URLError:
-        msg= _(u'Geocoding failed because of a network error.')
+        msg= _(u'msg_network_error',
+               default=u'Geocoding failed because of a network error.')
         display_status_message(msg)
 
     except ConflictError:
         raise
 
     except Exception, e:
-        msg= _(u'Geocoding failed because of an error: ${ecxeption}',
+        msg= _(u'msg_unhandled_exception',
+                default=u'Geocoding failed because of an error: ${ecxeption}',
                 mapping=dict(ecxeption=e))
         display_status_message(msg)
         return

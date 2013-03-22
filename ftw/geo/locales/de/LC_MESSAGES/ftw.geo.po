@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-03-22 10:08+0000\n"
+"POT-Creation-Date: 2013-03-22 11:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,24 +12,29 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./ftw/geo/handlers.py:52
-msgid "Couldn't find a suitable match for location \"${location}\". Please use the \"coordinates\" tab to manually set the correct map loaction."
-msgstr "Konnte keinen passenden Treffer für den Ort \"${location}\" finden. Bitte benutzen Sie das Tab \"Koordinaten\", um den Kartenausschnitt manuell zu setzen."
+#. Default: "More than one location found, chose first match \"${place}\". Please check that coordinates are correct."
+#: ./ftw/geo/handlers.py:44
+msgid "msg_multiple_matches"
+msgstr "Mehr als ein Ort gefunden. Es wurde das erste Resultat \"${place}\" gewählt. Prüfen Sie bitte ob die Koordinaten korrekt sind."
 
-#: ./ftw/geo/handlers.py:60
-msgid "Geocoding failed because daily query limit has been exceeded."
-msgstr "Die Geocodierung schlug fehl weil das tägliche Abfragen-Limit überschritten wurde."
-
-#: ./ftw/geo/handlers.py:65
-msgid "Geocoding failed because of a network error."
+#. Default: "Geocoding failed because of a network error."
+#: ./ftw/geo/handlers.py:68
+msgid "msg_network_error"
 msgstr "Die Geocodierung konnte aufgrund eines Netzwerkfehlers nicht durchgeführt werden."
 
-#: ./ftw/geo/handlers.py:72
-msgid "Geocoding failed because of an error: ${ecxeption}"
-msgstr "Die Geocodierung schlug aufgrund eines Fehlers fehl: ${ecxeption}"
+#. Default: "Couldn't find a suitable match for location \"${location}\". Please use the \"coordinates\" tab to manually set the correct map loaction."
+#: ./ftw/geo/handlers.py:52
+msgid "msg_no_match"
+msgstr "Konnte keinen passenden Treffer für den Ort \"${location}\" finden. Bitte benutzen Sie das Tab \"Koordinaten\", um den Kartenausschnitt manuell
 
-#: ./ftw/geo/handlers.py:45
-msgid "More than one location found, chose first match \"${place}\". Please check that coordinates are correct."
-msgstr "Mehr als ein Ort gefunden. Es wurde das erste Resultat \"${place}\" gewählt. Prüfen Sie bitte ob die Koordinaten korrekt sind."
+#. Default: "Geocoding failed because daily query limit has been exceeded."
+#: ./ftw/geo/handlers.py:61
+msgid "msg_too_many_queries"
+msgstr "Die Geocodierung schlug fehl weil das tägliche Abfragen-Limit überschritten wurde."
+
+#. Default: "Geocoding failed because of an error: ${ecxeption}"
+#: ./ftw/geo/handlers.py:76
+msgid "msg_unhandled_exception"
+msgstr "Die Geocodierung schlug aufgrund eines Fehlers fehl: ${ecxeption}"
 
 

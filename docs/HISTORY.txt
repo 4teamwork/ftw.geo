@@ -5,6 +5,9 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
+- Use message IDs and defaults in error message translations.
+  [lgraf]
+
 - Improved exception handling when doing geocoding on save.
   Deal with network errors and any other unhandled exception,
   and display meaningful messages for all cases.
