@@ -35,6 +35,6 @@ msgstr "Die Geocodierung schlug fehl weil das tägliche Abfragen-Limit überschr
 #. Default: "Geocoding failed because of an error: ${ecxeption}"
 #: ./ftw/geo/handlers.py:76
 msgid "msg_unhandled_exception"
-msgstr "Die Geocodierung schlug aufgrund eines Fehlers fehl: ${ecxeption}"
+msgstr "Die Geocodierung ist fehlgeschlagen: ${ecxeption}"
 
 
