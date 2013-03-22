@@ -7,8 +7,8 @@ from ftw.geo.interfaces import IGeocodableLocation
 from ftw.geo.testing import ZCML_LAYER
 from ftw.geo.tests.utils import is_coord_tuple
 from ftw.testing import MockTestCase
-from geopy.geocoders.google import GQueryError
-from geopy.geocoders.google import GTooManyQueriesError
+from geopy.geocoders.googlev3 import GQueryError
+from geopy.geocoders.googlev3 import GTooManyQueriesError
 from mocker import ARGS
 from mocker import KWARGS
 from mocker import MATCH
