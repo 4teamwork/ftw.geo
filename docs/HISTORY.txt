@@ -5,11 +5,14 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
+- Fix tests according to the new features
+  [mathias.leimgruber]
+
 - Display a status message when automatic geocoding didn't yield any results.
   [lgraf]
 
 - Make sure to import exceptions we check for from the googlev3 geocoder
-  after switching to V3 geocoding API. 
+  after switching to V3 geocoding API.
   [lgraf]
 
 - Deal with multiple results for automatic geocoding.
