@@ -5,6 +5,11 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
+- Improved exception handling when doing geocoding on save.
+  Deal with network errors and any other unhandled exception,
+  and display meaningful messages for all cases.
+  [lgraf]
+
 - Fix tests according to the new features
   [mathias.leimgruber]
 

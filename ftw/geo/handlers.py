@@ -6,12 +6,20 @@ from geopy.geocoders.googlev3 import GQueryError
 from geopy.geocoders.googlev3 import GTooManyQueriesError
 from plone.memoize import ram
 from Products.statusmessages.interfaces import IStatusMessage
+from urllib2 import URLError
+from ZODB.POSException import ConflictError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryAdapter
 from zope.component.hooks import getSite
 
 
 LOCATION_KEY = 'ftw.geo.interfaces.IGeocodableLocation'
+
+
+def display_status_message(msg):
+    site = getSite()
+    status = IStatusMessage(site.REQUEST)
+    status.addStatusMessage(msg, type='info')
 
 
 @ram.cache(lambda m, loc: loc)
@@ -44,12 +52,25 @@ def geocode_location(location):
                 '"${location}". Please use the "coordinates" tab to manually '
                 'set the correct map loaction.',
                 mapping=dict(location=location))
-        site = getSite()
-        status = IStatusMessage(site.REQUEST)
-        status.addStatusMessage(msg, type='info')
+        display_status_message(msg)
         return
+
     except GTooManyQueriesError:
-        # Query limit has been reached
+        msg= _(u'Geocoding failed because daily query limit has been exceeded.')
+        display_status_message(msg)
+        return
+
+    except URLError:
+        msg= _(u'Geocoding failed because of a network error.')
+        display_status_message(msg)
+
+    except ConflictError:
+        raise
+
+    except Exception, e:
+        msg= _(u'Geocoding failed because of an error: ${ecxeption}',
+                mapping=dict(ecxeption=e))
+        display_status_message(msg)
         return
 
 
@@ -73,8 +94,7 @@ def geocodeAddressHandler(obj, event):
             if geocoding_result:
                 _place, coords, msg = geocoding_result
                 if msg:
-                    status = IStatusMessage(obj.REQUEST)
-                    status.addStatusMessage(msg, type='info')
+                    display_status_message(msg)
                 geo_manager = queryAdapter(obj, IGeoManager)
                 geo_manager.setCoordinates('Point', (coords[1], coords[0]))
                 # Update the stored location
