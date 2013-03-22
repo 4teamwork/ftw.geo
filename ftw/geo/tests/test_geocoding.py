@@ -21,6 +21,8 @@ from zope.component import queryAdapter
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
+from Products.statusmessages.interfaces import IStatusMessage
+from mocker import ANY
 
 
 class ISomeType(Interface):
@@ -84,6 +86,13 @@ class TestGeocoding(MockTestCase):
             self.request).count(0, None)
         self.expect(self.request(ARGS, KWARGS)).result(result)
 
+    def mock_statusmessage_adapter(self):
+        self.statusmsg = self.mocker.mock(count=False)
+        self.message_cache = self.create_dummy()
+        self.expect(self.statusmsg(ANY).addStatusMessage(ANY, type=ANY)).call(
+            lambda msg, type: setattr(self.message_cache, type, msg))
+        self.mock_adapter(self.statusmsg, IStatusMessage, (Interface, ))
+
     def mock_context(self, address='Engehaldestr. 53',
                            zip_code='3012',
                            city='Bern',
@@ -94,6 +103,9 @@ class TestGeocoding(MockTestCase):
         self.expect(self.context.getZip()).result(zip_code)
         self.expect(self.context.getCity()).result(city)
         self.expect(self.context.getCountry()).result(country)
+
+        request = self.stub_request()
+        self.expect(self.context.REQUEST).result(request)
 
     def mock_annotations(self, count=1):
         annotation_factory = self.mocker.mock()
@@ -211,3 +223,22 @@ class TestGeocoding(MockTestCase):
 
         event = self.mocker.mock()
         geocodeAddressHandler(self.context, event)
+
+    def test_multiple_results(self):
+        self.mock_statusmessage_adapter()
+        self.mock_context('Hasslerstrasse', '3000', 'Bern', 'Switzerland')
+        self.mock_geomanager()
+        self.mock_annotations()
+        self.mock_geosettings_registry()
+
+        result = ((u'3001 Berne, Switzerland',
+                          (46.958857500000001, 7.4273286000000001)),
+
+                          (u'3000 Berne, Switzerland',
+                          (46.958857500000002, 7.4273286000000002)), )
+        self.replace_geopy_geocoders(result=result)
+        self.replay()
+
+        geocodeAddressHandler(self.context, None)
+        # Expect an info message
+        self.assertTrue(len(self.message_cache.info))
