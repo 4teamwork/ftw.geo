@@ -2,8 +2,8 @@ from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
-from geopy.geocoders.google import GQueryError
-from geopy.geocoders.google import GTooManyQueriesError
+from geopy.geocoders.googlev3 import GQueryError
+from geopy.geocoders.googlev3 import GTooManyQueriesError
 from plone.memoize import ram
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.annotation.interfaces import IAnnotations
