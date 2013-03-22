@@ -5,6 +5,16 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
+- Make sure to import exceptions we check for from the googlev3 geocoder
+  after switching to V3 geocoding API. 
+  [lgraf]
+
+- Deal with multiple results for automatic geocoding.
+  When automatic geocoding on save for a content item results in
+  more than one match, choose the first one and display a message
+  to the user that he might want to change it.
+  [lgraf]
+
 - Remove api key usage. The geopy GoogleV3 Geocoder does not
   implement an api key.
   [mathias.leimgruber]
