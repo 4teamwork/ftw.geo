@@ -74,8 +74,8 @@ class TestGeocoding(MockTestCase):
 
         if not result:
             # Use a default result
-            result = (u'3012 Berne, Switzerland',
-                      (46.958857500000001, 7.4273286000000001))
+            result = ((u'3012 Berne, Switzerland',
+                      (46.958857500000001, 7.4273286000000001)), )
 
         self.request = self.mocker.mock()
         req_method = self.mocker.replace(
