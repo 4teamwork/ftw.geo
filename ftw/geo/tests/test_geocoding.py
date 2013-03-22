@@ -98,8 +98,7 @@ class TestGeocoding(MockTestCase):
     def mock_annotations(self, count=1):
         annotation_factory = self.mocker.mock()
         self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
-        self.expect(annotation_factory(self.context)
-                   ).result({}).count(count)
+        self.expect(annotation_factory(self.context)).result({}).count(count)
 
     def mock_geosettings_registry(self, api_key=None):
         registry = self.stub()

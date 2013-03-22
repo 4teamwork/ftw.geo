@@ -33,7 +33,7 @@ def geocode_location(location):
         results = list(gmgeocoder.geocode(location, exactly_one=False))
         place, coords = results[0]
         if len(results) > 1:
-            msg= _(u'More than one location found, chose first match '
+            msg = _(u'More than one location found, chose first match '
                     '"${place}". Please check that coordinates are correct.',
                     mapping=dict(place=place))
         return (place, coords, msg)
@@ -71,7 +71,7 @@ def geocodeAddressHandler(obj, event):
         if not location == previous_location:
             geocoding_result = geocode_location(location)
             if geocoding_result:
-                place, coords, msg = geocoding_result
+                _place, coords, msg = geocoding_result
                 if msg:
                     status = IStatusMessage(obj.REQUEST)
                     status.addStatusMessage(msg, type='info')
