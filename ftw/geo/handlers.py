@@ -74,8 +74,8 @@ def geocode_location(location):
 
     except Exception, e:
         msg = _(u'msg_unhandled_exception',
-                default=u'Geocoding failed because of an error: ${ecxeption}',
-                mapping=dict(ecxeption=e))
+                default=u'Geocoding failed because of an error: ${exception}',
+                mapping=dict(exception=e))
         display_status_message(msg)
         return
 
