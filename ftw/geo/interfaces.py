@@ -1,3 +1,6 @@
+# pylint: disable=E0211
+# E0211: Method has no argument
+
 from zope.interface import Interface
 from zope.viewlet.interfaces import IViewletManager
 

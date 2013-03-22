@@ -7,17 +7,20 @@ from ftw.geo.interfaces import IGeocodableLocation
 from ftw.geo.testing import ZCML_LAYER
 from ftw.geo.tests.utils import is_coord_tuple
 from ftw.testing import MockTestCase
-from geopy.geocoders.google import GQueryError
-from geopy.geocoders.google import GTooManyQueriesError
+from geopy.geocoders.googlev3 import GQueryError
+from geopy.geocoders.googlev3 import GTooManyQueriesError
+from mocker import ANY
 from mocker import ARGS
 from mocker import KWARGS
 from mocker import MATCH
 from plone.registry.interfaces import IRegistry
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 from zope.component import getGlobalSiteManager
 from zope.component import provideAdapter
 from zope.component import queryAdapter
+from zope.component.hooks import setSite
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
@@ -74,8 +77,8 @@ class TestGeocoding(MockTestCase):
 
         if not result:
             # Use a default result
-            result = (u'3012 Berne, Switzerland',
-                      (46.958857500000001, 7.4273286000000001))
+            result = ((u'3012 Berne, Switzerland',
+                      (46.958857500000001, 7.4273286000000001)), )
 
         self.request = self.mocker.mock()
         req_method = self.mocker.replace(
@@ -84,10 +87,17 @@ class TestGeocoding(MockTestCase):
             self.request).count(0, None)
         self.expect(self.request(ARGS, KWARGS)).result(result)
 
+    def mock_statusmessage_adapter(self):
+        self.statusmsg = self.mocker.mock(count=False)
+        self.message_cache = self.create_dummy()
+        self.expect(self.statusmsg(ANY).addStatusMessage(ANY, type=ANY)).call(
+            lambda msg, type: setattr(self.message_cache, type, msg))
+        self.mock_adapter(self.statusmsg, IStatusMessage, (Interface, ))
+
     def mock_context(self, address='Engehaldestr. 53',
-                           zip_code='3012',
-                           city='Bern',
-                           country='Switzerland'):
+                     zip_code='3012',
+                     city='Bern',
+                     country='Switzerland'):
         ifaces = [ISomeType, IGeoreferenceable, IAnnotations, IGeoreferenced]
         self.context = self.providing_stub(ifaces)
         self.expect(self.context.getAddress()).result(address)
@@ -95,11 +105,13 @@ class TestGeocoding(MockTestCase):
         self.expect(self.context.getCity()).result(city)
         self.expect(self.context.getCountry()).result(country)
 
+        request = self.stub_request()
+        self.expect(self.context.REQUEST).result(request)
+
     def mock_annotations(self, count=1):
         annotation_factory = self.mocker.mock()
         self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
-        self.expect(annotation_factory(self.context)
-                   ).result({}).count(count)
+        self.expect(annotation_factory(self.context)).result({}).count(count)
 
     def mock_geosettings_registry(self, api_key=None):
         registry = self.stub()
@@ -171,6 +183,10 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_geocoding_handler_with_invalid_location(self):
+        site = self.create_dummy(getSiteManager=getGlobalSiteManager,
+                                 REQUEST=self.stub_request())
+        setSite(site)
+        self.mock_statusmessage_adapter()
         self.mock_context('Bag End', '1234', 'The Shire', 'Middle Earth')
         self.mock_annotations()
         self.mock_geosettings_registry()
@@ -180,6 +196,7 @@ class TestGeocoding(MockTestCase):
 
         event = self.mocker.mock()
         geocodeAddressHandler(self.context, event)
+        self.assertTrue(len(self.message_cache.info))
 
     def test_geocoding_handler_with_empty_location_string(self):
         self.mock_context('', '', '', '')
@@ -212,3 +229,22 @@ class TestGeocoding(MockTestCase):
 
         event = self.mocker.mock()
         geocodeAddressHandler(self.context, event)
+
+    def test_multiple_results(self):
+        self.mock_statusmessage_adapter()
+        self.mock_context('Hasslerstrasse', '3000', 'Bern', 'Switzerland')
+        self.mock_geomanager()
+        self.mock_annotations()
+        self.mock_geosettings_registry()
+
+        result = ((u'3001 Berne, Switzerland',
+                 (46.958857500000001, 7.4273286000000001)),
+
+                 (u'3000 Berne, Switzerland',
+                 (46.958857500000002, 7.4273286000000002)), )
+        self.replace_geopy_geocoders(result=result)
+        self.replay()
+
+        geocodeAddressHandler(self.context, None)
+        # Expect an info message
+        self.assertTrue(len(self.message_cache.info))
