@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-08-21 07:21+0000\n"
+"POT-Creation-Date: 2013-03-22 08:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,6 +12,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./ftw/geo/handlers.py:44
+#: ./ftw/geo/handlers.py:43
+msgid "Couldn't find a suitable match for location \"${location}\". Please use the \"coordinates\" tab to manually set the correct map loaction."
+msgstr "Konnte keinen passenden Treffer für den Ort \"${location}\" finden. Bitte benutzen Sie das Tab \"Koordinaten\", um den Kartenausschnitt manuell zu setzen."
+
+#: ./ftw/geo/handlers.py:36
 msgid "More than one location found, chose first match \"${place}\". Please check that coordinates are correct."
 msgstr "Mehr als ein Ort gefunden. Es wurde das erste Resultat \"${place}\" gewählt. Prüfen Sie bitte ob die Koordinaten korrekt sind."
+

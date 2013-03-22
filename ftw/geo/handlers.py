@@ -8,6 +8,7 @@ from plone.memoize import ram
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryAdapter
+from zope.component.hooks import getSite
 
 
 LOCATION_KEY = 'ftw.geo.interfaces.IGeocodableLocation'
@@ -39,6 +40,13 @@ def geocode_location(location):
 
     except GQueryError:
         # Couldn't find a suitable location
+        msg= _(u'Couldn\'t find a suitable match for location '
+                '"${location}". Please use the "coordinates" tab to manually '
+                'set the correct map loaction.',
+                mapping=dict(location=location))
+        site = getSite()
+        status = IStatusMessage(site.REQUEST)
+        status.addStatusMessage(msg, type='info')
         return
     except GTooManyQueriesError:
         # Query limit has been reached
