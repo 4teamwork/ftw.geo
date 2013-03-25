@@ -218,6 +218,10 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_geocoding_handler_with_too_many_queries(self):
+        site = self.create_dummy(getSiteManager=getGlobalSiteManager,
+                                 REQUEST=self.stub_request())
+        setSite(site)
+        self.mock_statusmessage_adapter()
         # Use different address values for context to avoid caching
         self.mock_context('Some Location', 'That', 'Wont', 'Matter')
         self.mock_annotations()
@@ -231,6 +235,9 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_multiple_results(self):
+        site = self.create_dummy(getSiteManager=getGlobalSiteManager,
+                                 REQUEST=self.stub_request())
+        setSite(site)
         self.mock_statusmessage_adapter()
         self.mock_context('Hasslerstrasse', '3000', 'Bern', 'Switzerland')
         self.mock_geomanager()
