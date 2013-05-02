@@ -207,6 +207,26 @@ class TestGeocoding(MockTestCase):
         # Expect the appropriate info message
         self.assertEquals(self.message_cache.info, 'msg_no_match')
 
+    def test_geocoding_handler_with_invalid_non_ascii_locatio(self):
+        self.mock_site()
+        self.mock_statusmessage_adapter()
+        self.mock_context('Ober\xc3\xa4geri', '1234', 'The Shire', 'Middle Earth')
+        self.mock_annotations()
+        self.replace_geopy_geocoders()
+        self.mocker.throw(GQueryError)
+        event = self.mocker.mock()
+        self.replay()
+
+        geocodeAddressHandler(self.context, event)
+        # Expect the appropriate info message
+        self.assertEquals(self.message_cache.info, 'msg_no_match')
+
+        msg = self.message_cache.info
+        loc = msg.mapping['location']
+        # Concatenate message (unicode) and location to force a possible
+        # UnicodeDecodeError if string types don't match
+        self.assertIsInstance(msg + loc, unicode)
+
     def test_geocoding_handler_with_empty_location_string(self):
         self.mock_context('', '', '', '')
         self.mock_geosettings_registry()

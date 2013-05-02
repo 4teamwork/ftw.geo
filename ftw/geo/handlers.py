@@ -53,7 +53,7 @@ def geocode_location(location):
                 default=u'Couldn\'t find a suitable match for location '
                 '"${location}". Please use the "coordinates" tab to manually '
                 'set the correct map loaction.',
-                mapping=dict(location=location))
+                mapping=dict(location=location.decode('utf-8')))
         display_status_message(msg)
         return
 
