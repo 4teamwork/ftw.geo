@@ -5,7 +5,7 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fix UnicodeDecode error while rendering the portal message for GQueryError.
 
 
 1.1 (2013-04-03)
