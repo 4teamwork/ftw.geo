@@ -25,7 +25,7 @@ msgstr "Die Geocodierung konnte aufgrund eines Netzwerkfehlers nicht durchgefüh
 #. Default: "Couldn't find a suitable match for location \"${location}\". Please use the \"coordinates\" tab to manually set the correct map loaction."
 #: ./ftw/geo/handlers.py:52
 msgid "msg_no_match"
-msgstr "Konnte keinen passenden Treffer für den Ort \"${location}\" finden. Bitte benutzen Sie das Tab \"Koordinaten\", um den Kartenausschnitt manuell
+msgstr "Konnte keinen passenden Treffer für den Ort \"${location}\" finden. Bitte benutzen Sie das Tab \"Koordinaten\", um den Kartenausschnitt manuell zu setzten"
 
 #. Default: "Geocoding failed because daily query limit has been exceeded."
 #: ./ftw/geo/handlers.py:61
@@ -36,5 +36,3 @@ msgstr "Die Geocodierung schlug fehl weil das tägliche Abfragen-Limit überschr
 #: ./ftw/geo/handlers.py:76
 msgid "msg_unhandled_exception"
 msgstr "Die Geocodierung ist fehlgeschlagen: ${ecxeption}"
-
-
