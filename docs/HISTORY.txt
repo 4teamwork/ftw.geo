@@ -5,6 +5,9 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Fix German translation file.
+  [jone]
+
 - Fix UnicodeDecode error while rendering the portal message for GQueryError.
 
 
