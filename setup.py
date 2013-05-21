@@ -45,6 +45,7 @@ setup(name='ftw.geo',
 
       install_requires=[
         'setuptools',
+        'geopy',
         'collective.geo.settings',
         'collective.geo.openlayers',
         'collective.geo.geographer',
