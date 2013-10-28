@@ -27,13 +27,13 @@
 
     <subscriber
         for="collective.geo.geographer.interfaces.IGeoreferenceable
-             Products.Archetypes.interfaces.IObjectEditedEvent"
+             zope.lifecycleevent.interfaces.IObjectModifiedEvent"
         handler=".handlers.geocodeAddressHandler"
         />
 
     <subscriber
         for="collective.geo.geographer.interfaces.IGeoreferenceable
-             Products.Archetypes.interfaces.IObjectInitializedEvent"
+             zope.lifecycleevent.interfaces.IObjectCreatedEvent"
         handler=".handlers.geocodeAddressHandler"
         />
 

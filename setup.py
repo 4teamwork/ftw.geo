@@ -13,6 +13,8 @@ tests_require = [
     'zope.configuration',
     'unittest2',
     'transaction',
+    'plone.app.dexterity',
+    'plone.directives.form',
     ]
 
 setup(name='ftw.geo',

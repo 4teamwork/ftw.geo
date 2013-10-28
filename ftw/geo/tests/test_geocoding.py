@@ -153,6 +153,7 @@ class TestGeocoding(MockTestCase):
         verifyClass(IGeocodableLocation, SomeTypeLocationAdapter)
 
     def test_geocoding_handler(self):
+        self.mock_site()
         self.mock_context()
         self.mock_geomanager()
         self.mock_annotations()
@@ -164,6 +165,7 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_geocoding_handler_with_same_location(self):
+        self.mock_site()
         # Use different address values for context to avoid caching
         self.mock_context('Hirschengraben', '3000', 'Bern', 'Switzerland')
         # geo manager should only be called once since the second request
@@ -181,6 +183,7 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_geocoding_handler_with_api_key(self):
+        self.mock_site()
         # Use different address values for context to avoid caching
         self.mock_context('Bahnhofplatz', '3000', 'Bern', 'Switzerland')
         self.mock_geomanager()
@@ -228,6 +231,7 @@ class TestGeocoding(MockTestCase):
         self.assertIsInstance(msg + loc, unicode)
 
     def test_geocoding_handler_with_empty_location_string(self):
+        self.mock_site()
         self.mock_context('', '', '', '')
         self.mock_geosettings_registry()
         event = self.mocker.mock()
@@ -236,6 +240,7 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
 
     def test_geocoding_handler_with_missing_adapter(self):
+        self.mock_site()
         self.mock_context()
         # Unregister the IGeocodableLocation adapter
         gsm = getGlobalSiteManager()
@@ -298,6 +303,7 @@ class TestGeocoding(MockTestCase):
         self.assertEquals(self.message_cache.info, 'msg_network_error')
 
     def test_geocoding_doesnt_swallow_conflict_error(self):
+        self.mock_site()
         self.mock_context('Some Address')
         self.mock_annotations()
         self.mock_geosettings_registry()
@@ -326,4 +332,3 @@ class TestGeocoding(MockTestCase):
         geocodeAddressHandler(self.context, event)
         # Expect the appropriate info message
         self.assertEquals(self.message_cache.info, 'msg_unhandled_exception')
-
