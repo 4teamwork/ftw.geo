@@ -81,3 +81,19 @@ class TestDexterityEvents(TestCase):
         obj = self.portal.get('address')
         self.assertEquals(('Point', (7.444608, 46.947922)),
                           IGeoManager(obj).getCoordinates())
+
+    @browsing
+    def test_geocoding_triggered_when_editing(self, browser):
+        browser.login().open()
+        factoriesmenu.add('Address')
+        with ExpectGeocodingRequest():
+            browser.fill({'Address': 'Bern, Switzerland'}).submit()
+        statusmessages.assert_no_error_messages()
+        obj = self.portal.get('address')
+
+        browser.find('Edit').click()
+        with ExpectGeocodingRequest('Zurich, Switzerland', (8.53918, 47.36864)):
+            browser.fill({'Address': 'Zurich, Switzerland'}).submit()
+
+        self.assertEquals(('Point', (47.36864, 8.53918)),
+                          IGeoManager(obj).getCoordinates())
