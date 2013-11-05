@@ -1,3 +1,5 @@
+from Products.statusmessages.interfaces import IStatusMessage
+from ZODB.POSException import ConflictError
 from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
@@ -5,12 +7,13 @@ from geopy import geocoders
 from geopy.geocoders.googlev3 import GQueryError
 from geopy.geocoders.googlev3 import GTooManyQueriesError
 from plone.memoize import ram
-from Products.statusmessages.interfaces import IStatusMessage
 from urllib2 import URLError
-from ZODB.POSException import ConflictError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryAdapter
 from zope.component.hooks import getSite
+from zope.interface import Interface
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 
 
 LOCATION_KEY = 'ftw.geo.interfaces.IGeocodableLocation'
@@ -80,10 +83,25 @@ def geocode_location(location):
         return
 
 
+class IGeoCoding(Interface):
+    """Interface used on the request for preventing recursive firing the event.
+    """
+
+
 def geocodeAddressHandler(obj, event):
     """Handler to automatically do geocoding lookups for IGeoreferenceable
     objects that have an IGeocodableLocation adapter.
     """
+    # When creating the obj, it has no request - we need to get it
+    # from the site.
+    request = getSite().REQUEST
+
+    # When we run the gecode address handler it will fire an object modified
+    # event - but we are subscribing to this event. This will result in a
+    # recursion unless we prevent it.
+    if IGeoCoding.providedBy(request):
+        return
+    alsoProvides(request, IGeoCoding)
 
     location_adapter = queryAdapter(obj, IGeocodableLocation)
     if not location_adapter:
@@ -105,3 +123,5 @@ def geocodeAddressHandler(obj, event):
                 geo_manager.setCoordinates('Point', (coords[1], coords[0]))
                 # Update the stored location
                 ann[LOCATION_KEY] = location
+
+    noLongerProvides(request, IGeoCoding)

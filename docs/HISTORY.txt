@@ -5,6 +5,9 @@ Changelog
 1.3 (unreleased)
 ----------------
 
+- Use zope.lifecycleevents for dexterity support.
+  [jone]
+
 - Added missing dependency.
   [Julian Infanger]
 
