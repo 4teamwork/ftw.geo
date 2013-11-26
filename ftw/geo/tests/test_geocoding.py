@@ -86,7 +86,7 @@ class TestGeocoding(MockTestCase):
         ram.global_cache.invalidate('ftw.geo.handlers.geocode_location')
 
     def replace_geopy_geocoders(self, result=None):
-        """Replace the geocode_url method of the Google geocoder with a mock
+        """Replace the geocode method of the Google geocoder with a mock
         that doesn't actually send a request to the Google API.
         """
 
@@ -97,7 +97,7 @@ class TestGeocoding(MockTestCase):
 
         self.request = self.mocker.mock()
         req_method = self.mocker.replace(
-            'geopy.geocoders.googlev3.GoogleV3.geocode_url')
+            'geopy.geocoders.googlev3.GoogleV3.geocode')
         self.expect(req_method(ARGS, KWARGS)).call(
             self.request).count(0, None)
         self.expect(self.request(ARGS, KWARGS)).result(result)
