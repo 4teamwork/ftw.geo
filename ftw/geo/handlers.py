@@ -1,19 +1,29 @@
-from Products.statusmessages.interfaces import IStatusMessage
-from ZODB.POSException import ConflictError
 from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
-from geopy.geocoders.googlev3 import GQueryError
-from geopy.geocoders.googlev3 import GTooManyQueriesError
 from plone.memoize import ram
+from Products.statusmessages.interfaces import IStatusMessage
 from urllib2 import URLError
+from ZODB.POSException import ConflictError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryAdapter
 from zope.component.hooks import getSite
-from zope.interface import Interface
 from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.interface import noLongerProvides
+
+
+try:
+    # geopy < 0.96
+    from geopy.geocoders.googlev3 import GQueryError
+    from geopy.geocoders.googlev3 import GTooManyQueriesError
+    GeocoderQueryError = GQueryError
+    GeocoderQuotaExceeded = GTooManyQueriesError
+except ImportError:
+    # geopy >= 0.96
+    from geopy.exc import GeocoderQueryError
+    from geopy.exc import GeocoderQuotaExceeded
 
 
 LOCATION_KEY = 'ftw.geo.interfaces.IGeocodableLocation'
@@ -50,7 +60,7 @@ def geocode_location(location):
                     mapping=dict(place=place))
         return (place, coords, msg)
 
-    except GQueryError:
+    except GeocoderQueryError:
         # Couldn't find a suitable location
         msg = _(u'msg_no_match',
                 default=u'Couldn\'t find a suitable match for location '
@@ -60,7 +70,7 @@ def geocode_location(location):
         display_status_message(msg)
         return
 
-    except GTooManyQueriesError:
+    except GeocoderQuotaExceeded:
         msg = _(u'msg_too_many_queries',
                 default=u'Geocoding failed because daily query limit has '
                 'been exceeded.')

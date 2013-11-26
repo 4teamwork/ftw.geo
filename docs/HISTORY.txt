@@ -5,6 +5,9 @@ Changelog
 1.3 (unreleased)
 ----------------
 
+- Use conditional imports to account for API changes in geopy 0.96.
+  [lgraf]
+
 - Use zope.lifecycleevents for dexterity support.
   [jone]
 

@@ -7,12 +7,11 @@ from ftw.geo.interfaces import IGeocodableLocation
 from ftw.geo.testing import ZCML_LAYER
 from ftw.geo.tests.utils import is_coord_tuple
 from ftw.testing import MockTestCase
-from geopy.geocoders.googlev3 import GQueryError
-from geopy.geocoders.googlev3 import GTooManyQueriesError
 from mocker import ANY
 from mocker import ARGS
 from mocker import KWARGS
 from mocker import MATCH
+from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
 from Products.statusmessages.interfaces import IStatusMessage
 from urllib2 import URLError
@@ -26,7 +25,18 @@ from zope.component.hooks import setSite
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
-from plone.memoize import ram
+
+
+try:
+    # geopy < 0.96
+    from geopy.geocoders.googlev3 import GQueryError
+    from geopy.geocoders.googlev3 import GTooManyQueriesError
+    GeocoderQueryError = GQueryError
+    GeocoderQuotaExceeded = GTooManyQueriesError
+except ImportError:
+    # geopy >= 0.96
+    from geopy.exc import GeocoderQueryError
+    from geopy.exc import GeocoderQuotaExceeded
 
 
 class ISomeType(Interface):
@@ -202,7 +212,7 @@ class TestGeocoding(MockTestCase):
         self.mock_annotations()
         self.mock_geosettings_registry()
         self.replace_geopy_geocoders()
-        self.mocker.throw(GQueryError)
+        self.mocker.throw(GeocoderQueryError)
         event = self.mocker.mock()
         self.replay()
 
@@ -216,7 +226,7 @@ class TestGeocoding(MockTestCase):
         self.mock_context('Ober\xc3\xa4geri', '1234', 'The Shire', 'Middle Earth')
         self.mock_annotations()
         self.replace_geopy_geocoders()
-        self.mocker.throw(GQueryError)
+        self.mocker.throw(GeocoderQueryError)
         event = self.mocker.mock()
         self.replay()
 
@@ -259,7 +269,7 @@ class TestGeocoding(MockTestCase):
         self.mock_geosettings_registry()
         self.replace_geopy_geocoders()
 
-        self.mocker.throw(GTooManyQueriesError)
+        self.mocker.throw(GeocoderQuotaExceeded)
         event = self.mocker.mock()
         self.replay()
 
