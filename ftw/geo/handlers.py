@@ -2,7 +2,9 @@ from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
+from plone.dexterity.interfaces import IDexterityContent
 from plone.memoize import ram
+from Products.Archetypes.interfaces import IBaseObject
 from Products.statusmessages.interfaces import IStatusMessage
 from urllib2 import URLError
 from ZODB.POSException import ConflictError
@@ -96,6 +98,20 @@ def geocode_location(location):
 class IGeoCoding(Interface):
     """Interface used on the request for preventing recursive firing the event.
     """
+
+
+def at(obj, event):
+    if IBaseObject.providedBy(obj):
+        return geocodeAddressHandler(obj, event)
+    else:
+        return
+
+
+def dx(obj, event):
+    if IDexterityContent.providedBy(obj):
+        return geocodeAddressHandler(obj, event)
+    else:
+        return
 
 
 def geocodeAddressHandler(obj, event):
