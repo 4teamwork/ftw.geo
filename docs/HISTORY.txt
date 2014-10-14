@@ -6,6 +6,7 @@ Changelog
 ------------------
 
 - Use Archetypes events for AT content and zope.lifecycle events for DX.
+- BugFix: No longer cast geocode (of geocoders.GoogleV3) to list. It's already a list.
   [mathias.leimgruber]
 
 

@@ -1,3 +1,4 @@
+from collections import Iterable
 from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
@@ -53,7 +54,12 @@ def geocode_location(location):
     gmgeocoder = geocoders.GoogleV3()
 
     try:
-        results = list(gmgeocoder.geocode(location, exactly_one=False))
+        results = gmgeocoder.geocode(location, exactly_one=False)
+
+        # geopy < 0.98 does not return a list in every case.
+        if not isinstance(results, list):
+            results = list(results)
+
         place, coords = results[0]
         if len(results) > 1:
             msg = _(u'msg_multiple_matches',
