@@ -1,8 +1,11 @@
+from collections import Iterable
 from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
+from plone.dexterity.interfaces import IDexterityContent
 from plone.memoize import ram
+from Products.Archetypes.interfaces import IBaseObject
 from Products.statusmessages.interfaces import IStatusMessage
 from urllib2 import URLError
 from ZODB.POSException import ConflictError
@@ -51,7 +54,12 @@ def geocode_location(location):
     gmgeocoder = geocoders.GoogleV3()
 
     try:
-        results = list(gmgeocoder.geocode(location, exactly_one=False))
+        results = gmgeocoder.geocode(location, exactly_one=False)
+
+        # geopy < 0.98 does not return a list in every case.
+        if not isinstance(results, list):
+            results = list(results)
+
         place, coords = results[0]
         if len(results) > 1:
             msg = _(u'msg_multiple_matches',
@@ -96,6 +104,20 @@ def geocode_location(location):
 class IGeoCoding(Interface):
     """Interface used on the request for preventing recursive firing the event.
     """
+
+
+def at(obj, event):
+    if IBaseObject.providedBy(obj):
+        return geocodeAddressHandler(obj, event)
+    else:
+        return
+
+
+def dx(obj, event):
+    if IDexterityContent.providedBy(obj):
+        return geocodeAddressHandler(obj, event)
+    else:
+        return
 
 
 def geocodeAddressHandler(obj, event):
