@@ -5,7 +5,9 @@ Changelog
 1.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Declare plone.app.dexterity as dependency.
+  Dexterity is used in the handlers.py.
+  [mathias.leimgruber]
 
 
 1.3.1 (2014-10-20)

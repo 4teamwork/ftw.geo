@@ -13,7 +13,6 @@ tests_require = [
     'zope.configuration',
     'unittest2',
     'transaction',
-    'plone.app.dexterity',
     'plone.directives.form',
     ]
 
@@ -54,6 +53,7 @@ setup(name='ftw.geo',
         'collective.geo.geographer',
         'collective.geo.contentlocations',
         'collective.geo.kml',
+        'plone.app.dexterity',
         'ftw.upgrade',
         ],
 
