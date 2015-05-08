@@ -232,7 +232,3 @@ Copyright
 This package is copyright by `4teamwork <http://www.4teamwork.ch/>`_.
 
 ``ftw.geo`` is licensed under GNU General Public License, version 2.
-
-.. image:: https://cruel-carlota.pagodabox.com/d593b63e91c74b5d810350f31abc1200
-   :alt: githalytics.com
-   :target: http://githalytics.com/4teamwork/ftw.geo
