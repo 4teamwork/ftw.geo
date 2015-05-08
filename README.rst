@@ -214,9 +214,9 @@ Use it in your main ``buildout.cfg`` like this::
 Links
 =====
 
-- Main github project repository: https://github.com/4teamwork/ftw.geo
-- Issue tracker: https://github.com/4teamwork/ftw.geo/issues
-- Package on pypi: http://pypi.python.org/pypi/ftw.geo
+- Github: https://github.com/4teamwork/ftw.geo
+- Issues: https://github.com/4teamwork/ftw.geo/issues
+- Pypi: http://pypi.python.org/pypi/ftw.geo
 - Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.geo
 
 
