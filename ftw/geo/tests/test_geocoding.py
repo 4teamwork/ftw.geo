@@ -145,7 +145,7 @@ class TestGeocoding(MockTestCase):
         geomanager_factory = self.mocker.mock()
         self.mock_adapter(geomanager_factory, IGeoManager, (Interface,))
         self.expect(geomanager_factory(self.context)
-                    ).result(geomanager_proxy)
+                    ).result(geomanager_proxy).count(0, None)
         coords = ('Point', MATCH(is_coord_tuple))
         self.expect(geomanager_proxy.setCoordinates(*coords)).count(count)
 

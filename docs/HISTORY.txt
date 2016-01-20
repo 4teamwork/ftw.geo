@@ -5,6 +5,12 @@ Changelog
 1.3.3 (unreleased)
 ------------------
 
+- Fix removing coordinates if no location is given.
+  If you remove an existing address from an object, the handler is now
+  removing the coordinates too. This causes that the map will no longer be
+  visible on the object.
+  [elioschmutz]
+
 - Restrict versions of some dependencies so they don't pull in Plone 5.
   [mbaechtold]
 

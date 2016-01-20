@@ -140,6 +140,7 @@ def geocodeAddressHandler(obj, event):
         return
 
     location = location_adapter.getLocationString()
+    geo_manager = queryAdapter(obj, IGeoManager)
 
     if location:
         ann = queryAdapter(obj, IAnnotations)
@@ -151,9 +152,11 @@ def geocodeAddressHandler(obj, event):
                 _place, coords, msg = geocoding_result
                 if msg:
                     display_status_message(msg)
-                geo_manager = queryAdapter(obj, IGeoManager)
                 geo_manager.setCoordinates('Point', (coords[1], coords[0]))
                 # Update the stored location
                 ann[LOCATION_KEY] = location
+
+    elif not location and geo_manager:
+        geo_manager.removeCoordinates()
 
     noLongerProvides(request, IGeoCoding)

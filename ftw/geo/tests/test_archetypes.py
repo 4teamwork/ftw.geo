@@ -77,3 +77,20 @@ class TestArchetypesEvents(TestCase):
 
         self.assertEquals(('Point', (47.36864, 8.53918)),
                           IGeoManager(obj).getCoordinates())
+
+    @browsing
+    def test_delete_geocoding_if_address_removed(self, browser):
+        browser.login().open()
+        factoriesmenu.add('Page')
+
+        with ExpectGeocodingRequest():
+            browser.fill({'Title': 'Bern, Switzerland'}).submit()
+
+        statusmessages.assert_no_error_messages()
+        obj = self.portal.get('bern-switzerland')
+        obj.schema.get('title').required = False
+
+        browser.find('Edit').click()
+        browser.fill({'Title': ''}).submit()
+
+        self.assertEquals((None, None), IGeoManager(obj).getCoordinates())
