@@ -27,7 +27,7 @@ class IAddress(Interface):
 
 class IAddressSchema(form.Schema):
 
-    address = schema.Text(title=u'Address')
+    address = schema.Text(title=u'Address', required=False)
 
 
 class AddressLocationAdapter(object):
@@ -97,3 +97,20 @@ class TestDexterityEvents(TestCase):
 
         self.assertEquals(('Point', (47.36864, 8.53918)),
                           IGeoManager(obj).getCoordinates())
+
+    @browsing
+    def test_delete_geocoding_if_address_removed(self, browser):
+        browser.login().open()
+        factoriesmenu.add('Address')
+        with ExpectGeocodingRequest():
+            browser.fill({'Address': 'Bern, Switzerland'}).submit()
+        statusmessages.assert_no_error_messages()
+
+        obj = self.portal.get('address')
+        self.assertEquals(('Point', (7.444608, 46.947922)),
+                          IGeoManager(obj).getCoordinates())
+
+        browser.find('Edit').click()
+        browser.fill({'Address': ''}).submit()
+
+        self.assertEquals((None, None), IGeoManager(obj).getCoordinates())
