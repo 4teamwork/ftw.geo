@@ -144,6 +144,16 @@ it::
         factory="collective.geo.kml.browser.viewlets.KMLMapViewletLayers"
         />
 
+Your view class have to provide the ``collective.geo.kml.interfaces.IKMLOpenLayersView``::
+
+    from collective.geo.kml.interfaces import IKMLOpenLayersView
+    from Products.Five.browser import BrowserView
+    from zope.interface import implements
+
+
+    class ContactView(BrowserView):
+        implements(IKMLOpenLayersView)
+
 Then, in your view's template, simply use the macros provided by
 collective.geo.mapwidget::
 
