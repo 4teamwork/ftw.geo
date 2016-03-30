@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.3.4 (unreleased)
+1.3.4 (2016-03-30)
 ------------------
 
 - Fix bug when using ftw.geo in combination with the IReferenceable behavior.
