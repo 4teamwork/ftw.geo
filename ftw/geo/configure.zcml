@@ -35,7 +35,7 @@
 
     <subscriber
         for="collective.geo.geographer.interfaces.IGeoreferenceable
-             zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+             zope.lifecycleevent.interfaces.IObjectAddedEvent"
         handler=".handlers.dx"
         />
 
