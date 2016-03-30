@@ -52,10 +52,15 @@ class TestDexterityEvents(TestCase):
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         login(self.portal, TEST_USER_NAME)
 
+        # Because we have a bug if we use ftw.geo in combination
+        # with the IReferenceable behavior, we run all tests with
+        # this behavior.
         fti = DexterityFTI(
             u'Address',
             schema='.'.join((IAddressSchema.__module__, 'IAddressSchema')),
-            klass='.'.join((Address.__module__, 'Address')))
+            klass='.'.join((Address.__module__, 'Address')),
+            behaviors=['plone.app.referenceablebehavior.referenceable.IReferenceable'])
+
         self.portal.portal_types._setObject('Address', fti)
         fti.lookupSchema()
 

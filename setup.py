@@ -13,6 +13,7 @@ tests_require = [
     'zope.configuration',
     'unittest2',
     'transaction',
+    'plone.app.referenceablebehavior',
     'plone.directives.form',
     ]
 
