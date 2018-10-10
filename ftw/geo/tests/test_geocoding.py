@@ -11,6 +11,7 @@ from mocker import ANY
 from mocker import ARGS
 from mocker import KWARGS
 from mocker import MATCH
+from plone import api
 from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
 from Products.statusmessages.interfaces import IStatusMessage
@@ -79,11 +80,16 @@ class TestGeocoding(MockTestCase):
         provideAdapter(SomeTypeLocationAdapter)
         self.context = None
 
+        self.original_get_registry_record = api.portal.get_registry_record
+        api.portal.get_registry_record = lambda *args, **kwargs: 'mock tests deserve this'
+
     def tearDown(self):
         super(TestGeocoding, self).tearDown()
         self.context = None
         # Invalidate the geocoding cache so tests run in isolation
         ram.global_cache.invalidate('ftw.geo.handlers.geocode_location')
+
+        api.portal.get_registry_record = self.original_get_registry_record
 
     def replace_geopy_geocoders(self, result=None):
         """Replace the geocode method of the Google geocoder with a mock

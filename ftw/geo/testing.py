@@ -36,7 +36,6 @@ class GeoLayer(PloneSandboxLayer):
             '</configure>',
             context=configurationContext)
 
-
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.dexterity:default')
 

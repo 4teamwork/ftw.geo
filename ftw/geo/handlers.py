@@ -3,6 +3,7 @@ from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
+from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.memoize import ram
 from Products.Archetypes.interfaces import IBaseObject
@@ -48,10 +49,12 @@ def geocode_location(location):
     been selected.
     """
     msg = None
+    google_api = api.portal.get_registry_record(
+        'collective.geo.settings.interfaces.IGeoSettings.googleapi',
+        default=None,
+    )
 
-    # Google map api v3 does not take any api key
-    # Check GoogleV3 implementation
-    gmgeocoder = geocoders.GoogleV3()
+    gmgeocoder = geocoders.GoogleV3(api_key=google_api)
 
     try:
         results = gmgeocoder.geocode(location, exactly_one=False)
