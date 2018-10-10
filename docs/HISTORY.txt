@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.3.6 (unreleased)
+1.3.6 (2018-10-10)
 ------------------
 
 - Pass google api key from "IGeoSettings.googleapi" to GoogleV3 (required now). [mathias.leimgruber]
