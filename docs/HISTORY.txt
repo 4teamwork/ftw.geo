@@ -5,6 +5,8 @@ Changelog
 1.3.6 (unreleased)
 ------------------
 
+- Pass google api key from "IGeoSettings.googleapi" to GoogleV3 (required now). [mathias.leimgruber]
+
 - Drop Plone 4.1 support. [jone]
 
 
