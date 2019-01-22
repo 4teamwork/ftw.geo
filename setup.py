@@ -54,7 +54,7 @@ setup(name='ftw.geo',
         'collective.geo.kml',
         'collective.geo.mapwidget >= 2.1, < 3.0',
         'plone.app.dexterity',
-        'plone.api',
+        'plone.api >= 1.5.1',
         'ftw.upgrade',
         ],
 
