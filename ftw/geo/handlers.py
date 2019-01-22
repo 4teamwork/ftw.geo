@@ -1,4 +1,3 @@
-from collections import Iterable
 from collective.geo.contentlocations.interfaces import IGeoManager
 from ftw.geo import _
 from ftw.geo.interfaces import IGeocodableLocation
@@ -7,6 +6,7 @@ from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.memoize import ram
 from Products.Archetypes.interfaces import IBaseObject
+from Products.CMFPlone.utils import safe_unicode
 from Products.statusmessages.interfaces import IStatusMessage
 from urllib2 import URLError
 from ZODB.POSException import ConflictError
@@ -77,7 +77,7 @@ def geocode_location(location):
                 default=u'Couldn\'t find a suitable match for location '
                 '"${location}". Please use the "coordinates" tab to manually '
                 'set the correct map loaction.',
-                mapping=dict(location=location.decode('utf-8')))
+                mapping=dict(location=safe_unicode(location)))
         display_status_message(msg)
         return
 

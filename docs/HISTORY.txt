@@ -5,6 +5,8 @@ Changelog
 1.3.7 (unreleased)
 ------------------
 
+- The location adapter may return utf-8 or unicode, so lets use safe_uniode to be sure. [mathias.leimgruber]
+
 - Drop Plone 4.2 support. [mathias.leimgruber]
 
 - Since Version 1.3.6 plone.api 1.5.1 is required. [mathias.leimgruber]
