@@ -1,10 +1,14 @@
 from ftw.testing.layer import ComponentRegistryLayer
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import applyProfile
 from plone.testing import zca
 from zope.configuration import xmlconfig
+import pkg_resources
+
+
+IS_PLONE_5 = pkg_resources.get_distribution('Products.CMFPlone').version >= '5'
 
 
 class ZCMLLayer(ComponentRegistryLayer):

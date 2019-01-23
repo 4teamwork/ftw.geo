@@ -1,17 +1,19 @@
-from Products.ATContentTypes.content.document import ATDocument
-from Products.ATContentTypes.interfaces import IATDocument
 from collective.geo.contentlocations.interfaces import IGeoManager
 from collective.geo.geographer.interfaces import IGeoreferenceable
 from ftw.geo.interfaces import IGeocodableLocation
 from ftw.geo.testing import GEO_FUNCTIONAL_TESTING
+from ftw.geo.testing import IS_PLONE_5
 from ftw.geo.tests.helpers import ExpectGeocodingRequest
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from Products.ATContentTypes.content.document import ATDocument
+from Products.ATContentTypes.interfaces import IATDocument
+from unittest2 import skipIf
 from unittest2 import TestCase
 from zope.component import getSiteManager
 from zope.interface import classImplements
@@ -29,6 +31,7 @@ class TitleLocationAdapter(object):
         return self.context.Title()
 
 
+@skipIf(IS_PLONE_5, 'Disable AT tests for Plone 5.1')
 class TestArchetypesEvents(TestCase):
 
     layer = GEO_FUNCTIONAL_TESTING

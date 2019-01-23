@@ -58,8 +58,7 @@ class TestDexterityEvents(TestCase):
         fti = DexterityFTI(
             u'Address',
             schema='.'.join((IAddressSchema.__module__, 'IAddressSchema')),
-            klass='.'.join((Address.__module__, 'Address')),
-            behaviors=['plone.app.referenceablebehavior.referenceable.IReferenceable'])
+            klass='.'.join((Address.__module__, 'Address')))
 
         self.portal.portal_types._setObject('Address', fti)
         fti.lookupSchema()
