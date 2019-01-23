@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.3.7 (unreleased)
+1.4.0 (2019-01-23)
 ------------------
 
 - The location adapter may return utf-8 or unicode, so lets use safe_uniode to be sure. [mathias.leimgruber]
