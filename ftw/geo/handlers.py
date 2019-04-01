@@ -59,6 +59,9 @@ def geocode_location(location):
     try:
         results = gmgeocoder.geocode(location, exactly_one=False)
 
+        if results is None:
+            raise GeocoderQueryError
+
         # geopy < 0.98 does not return a list in every case.
         if not isinstance(results, list):
             results = list(results)
