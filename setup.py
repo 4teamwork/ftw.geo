@@ -13,9 +13,12 @@ tests_require = [
     'zope.configuration',
     'unittest2',
     'transaction',
-    'plone.app.referenceablebehavior',
     'plone.directives.form',
-    ]
+]
+
+plone4 = [
+    'plone.app.referenceablebehavior',
+]
 
 setup(name='ftw.geo',
       version=version,
@@ -60,7 +63,8 @@ setup(name='ftw.geo',
         ],
 
       tests_require=tests_require,
-      extras_require=dict(tests=tests_require),
+      extras_require=dict(tests=tests_require,
+                          plone4=plone4),
 
       entry_points='''
       # -*- Entry points: -*-
