@@ -5,7 +5,7 @@ Changelog
 1.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Move plone5 incompatible dependency to plone4 extra [Nachtalb]
 
 
 1.4.1 (2019-04-01)
