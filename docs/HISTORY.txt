@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.4.2 (unreleased)
+1.4.2 (2019-10-23)
 ------------------
 
 - Move plone5 incompatible dependency to plone4 extra [Nachtalb]
