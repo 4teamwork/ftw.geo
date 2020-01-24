@@ -5,7 +5,7 @@ Changelog
 1.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix UnicodeDecodeError when geo-coding a location. [mbaechtold]
 
 
 1.4.2 (2019-10-23)

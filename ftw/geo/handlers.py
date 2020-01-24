@@ -4,6 +4,7 @@ from ftw.geo.interfaces import IGeocodableLocation
 from geopy import geocoders
 from plone import api
 from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.utils import safe_utf8
 from plone.memoize import ram
 from Products.Archetypes.interfaces import IBaseObject
 from Products.CMFPlone.utils import safe_unicode
@@ -153,7 +154,7 @@ def geocodeAddressHandler(obj, event):
         previous_location = ann.get(LOCATION_KEY)
         # Only do the geocoding lookup if the location changed
         if not location == previous_location:
-            geocoding_result = geocode_location(location)
+            geocoding_result = geocode_location(safe_utf8(location))
             if geocoding_result:
                 _place, coords, msg = geocoding_result
                 if msg:
