@@ -246,6 +246,27 @@ class TestGeocoding(MockTestCase):
         # UnicodeDecodeError if string types don't match
         self.assertIsInstance(msg + loc, unicode)
 
+    def test_geocoding_handler_with_unicode_location(self):
+        self.mock_site()
+        self.mock_statusmessage_adapter()
+        self.mock_context(city=u'B\xe4rn')  # This is the special case we're testing here.
+        self.mock_annotations()
+        self.replace_geopy_geocoders()
+        self.mocker.throw(GeocoderQueryError)
+        event = self.mocker.mock()
+        self.replay()
+
+        geocodeAddressHandler(self.context, event)
+
+        self.assertEquals(self.message_cache.info, 'msg_no_match')
+
+        msg = self.message_cache.info
+        loc = msg.mapping['location']
+        self.assertEqual(
+            loc,
+            u'Engehaldestr. 53, 3012, B\xe4rn, Switzerland',
+        )
+
     def test_geocoding_handler_with_empty_location_string(self):
         self.mock_site()
         self.mock_context('', '', '', '')
