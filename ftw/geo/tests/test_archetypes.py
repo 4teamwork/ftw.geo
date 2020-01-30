@@ -13,8 +13,8 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from Products.ATContentTypes.content.document import ATDocument
 from Products.ATContentTypes.interfaces import IATDocument
-from unittest2 import skipIf
-from unittest2 import TestCase
+from unittest import skipIf
+from unittest import TestCase
 from zope.component import getSiteManager
 from zope.interface import classImplements
 import transaction
