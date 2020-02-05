@@ -6,12 +6,10 @@ maintainer = 'Lukas Graf'
 
 tests_require = [
     'ftw.testbrowser',
-    'ftw.testing<2.0a',
-    'mocker',
+    'ftw.testing',
     'plone.app.testing',
     'plone.testing',
     'zope.configuration',
-    'unittest2',
     'transaction',
     'plone.directives.form',
 ]

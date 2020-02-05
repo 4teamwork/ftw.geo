@@ -13,7 +13,7 @@ from plone.app.testing import setRoles
 from plone.dexterity.content import Item
 from plone.dexterity.fti import DexterityFTI
 from plone.directives import form
-from unittest2 import TestCase
+from unittest import TestCase
 from zope import schema
 from zope.component import getSiteManager
 from zope.interface import Interface

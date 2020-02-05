@@ -5,7 +5,7 @@ Changelog
 1.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Rewrite mocker tests with mock. [tinagerber]
 
 
 1.4.2 (2019-10-23)
